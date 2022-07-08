@@ -6,71 +6,130 @@ public class Main {
         Scanner myScanner = new Scanner(System.in);
         // Constant - amount of paint per square metre
         double PAINT_PER_SQ_M = 0.0833;
+        double PI = Math.PI;
 
         // get number of walls to paint
         System.out.println("How many walls do you want to paint?");
-        int numberOfWalls = Integer.parseInt(myScanner.nextLine());
+        byte numberOfWalls = Byte.parseByte(myScanner.nextLine());
 
         // get amount of coats wanted
         System.out.println("How many coats would you like?");
-        int numberOfCoats = Integer.parseInt(myScanner.nextLine());
+        byte numberOfCoats = Byte.parseByte(myScanner.nextLine());
 
-        // find out the colour the user wants
+
+
+        // find out the colour the user wants, take input and check if it is valid colour
         String[] colours = {"blue", "green", "orange", "red", "yellow", "purple"};
         String colourMessage = "What colour would you like? ";
 
-        for (int i = 0; i < colours.length; i++) {
+        for (byte i = 0; i < colours.length; i++) {
             if (i == colours.length - 1) {
                 colourMessage = colourMessage.concat(" or ");
-            } else if (!(i == 0)) {
+            } else if (i != 0) {
                 colourMessage = colourMessage.concat(", ");
             }
             colourMessage = colourMessage.concat(colours[i]);
         }
-        System.out.println(colourMessage);
-        String wallColour = myScanner.nextLine();
+
+        boolean validColour = false;
+        String wallColour = "";
+        while(!validColour) {
+            System.out.println(colourMessage);
+            wallColour = myScanner.nextLine();
+            for(int i = 0; i < colours.length; i++) {
+                if (colours[i].contains(wallColour)) {
+                    validColour = true;
+                    break;
+                } else if (i == colours.length - 1) {
+                    System.out.println("Hm, don't know that colour. Try again");
+                }
+            }
+        }
 
 
-        //get the width and any obstacles on each wall. Then return the total paint area minus obstacles
-        int totalPaintArea = 0;
-        for (int i = 1; i <= numberOfWalls; i++) {
+
+
+        //get the width and any obstacles on each wall. Then return the total paint area minus obstacles.
+        byte totalPaintArea = 0;
+        for (byte i = 1; i <= numberOfWalls; i++) {
             double totalObstacleArea = 0;
 
-            System.out.println("How tall is wall " + i + "? (to nearest metre)");
-            int height = Integer.parseInt(myScanner.nextLine());
+            System.out.println("How tall is wall " + i + "? (in metres and centimetres i.e 1.5, 2.34)");
+            double height = Double.parseDouble(myScanner.nextLine());
 
-            System.out.println("How wide is wall " + i + "? (to nearest metre)");
-            int width = Integer.parseInt(myScanner.nextLine());
+            System.out.println("How wide is wall " + i + "(in metres and centimetres i.e 1.5, 2.34)");
+            double width = Double.parseDouble(myScanner.nextLine());
 
-            System.out.println("Is there something on wall " + i + "? (true or false)");
+            double wallArea = height * width;
+
+            System.out.println("Is there something on wall " + i + "? (t/f)");
             boolean obstacle = Boolean.parseBoolean(myScanner.nextLine());
-
+            // if there is an obstacle removal
             if (obstacle) {
-                double obstacleArea;
 
                 System.out.println("How many obstacles are there?");
-                int numOfObstacles = Integer.parseInt(myScanner.nextLine());
+                byte numOfObstacles = Byte.parseByte(myScanner.nextLine());
 
-                for (int j = 0; j < numOfObstacles; j++) {
+                for (byte j = 0; j < numOfObstacles; j++) {
+                    System.out.println("What shape is obstacle " + j + "? (circle, square, rectangle, triangle)");
+                    String obstacleShape = myScanner.nextLine();
 
-                    System.out.println("How tall is obstacle" + j + "? (to nearest cm)");
-                    int obstacleHeight = Integer.parseInt(myScanner.nextLine());
+                    double obstacleArea = 0;
+                    switch (obstacleShape) {
+                        case "square":
+                            System.out.println("How wide is obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            double obstacleHeightSq = Double.parseDouble(myScanner.nextLine());
 
-                    System.out.println("How wide is obstacle" + j + "? (to nearest cm)");
-                    int obstacleWidth = Integer.parseInt(myScanner.nextLine());
+                            obstacleArea = Math.pow((obstacleHeightSq), 2) ;
+                            break;
+                        case "rectangle":
+                            System.out.println("How tall is obstacle" + j + "? (in metres and centimetres i.e 1.5, 0.34)");
+                            double obstacleHeightRec = Double.parseDouble(myScanner.nextLine());
 
-                    obstacleArea = (obstacleHeight * 100) * (obstacleWidth * 100);
+                            System.out.println("How wide is obstacle" + j + "? \"(in metres and centimetres i.e 1.5, 0.34)");
+                            double obstacleWidthRec = Double.parseDouble(myScanner.nextLine());
+
+                            obstacleArea = (obstacleHeightRec * obstacleWidthRec);
+                            break;
+                        case "triangle":
+                            System.out.println("How tall is obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            double obstacleHeightTri = Double.parseDouble(myScanner.nextLine());
+
+                            System.out.println("How wide is the base of obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            double obstacleWidthTri = Double.parseDouble(myScanner.nextLine());
+
+                            obstacleArea = (obstacleHeightTri * obstacleWidthTri / 2);
+                            break;
+                        case "circle":
+                            System.out.println("How wide is obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            double obstacleWidthCir = Double.parseDouble(myScanner.nextLine());
+                            double radius = obstacleWidthCir/ 2;
+
+                            obstacleArea = (Math.pow(radius, 2)  * PI);
+                            break;
+                        default:
+                            System.out.println("Hmm, I don't understand");
+                            break;
+                    }
                     totalObstacleArea += obstacleArea;
                 }
             }
-            totalPaintArea += (height * width) - totalObstacleArea;
+            totalPaintArea += wallArea - totalObstacleArea;
         }
-        //work out amount of paint needed
-        float paintInLitres = (float) (totalPaintArea * PAINT_PER_SQ_M * numberOfCoats);
-        float amountPaintNeeded = paintInLitres; // necessary for the final print out
 
-        // Find out if user knows what kind of paint can they will use
-        System.out.println("Do you know the paint can size you'll be using? (true or false)");
+
+        //work out amount of paint needed
+        double paintInLitres = (totalPaintArea * PAINT_PER_SQ_M * numberOfCoats);
+        double amountPaintNeeded = paintInLitres; // necessary for the final print out
+
+
+        //price list
+        byte L2price = 20;
+        byte L1price = 12;
+        byte LHalfPrice = 7;
+
+        // Find out if user knows what kind of paint  they will use
+        System.out.println("Do you know the paint can size you'll be using? (t/f)");
         boolean userPaintCanBool = Boolean.parseBoolean(myScanner.nextLine());
 
         if (userPaintCanBool) {
@@ -78,49 +137,63 @@ public class Main {
             String paintCanSize = myScanner.nextLine();
             double paintCanSizeNum = Double.parseDouble(paintCanSize);
 
+            // total price
+            int totalCostUserChoice = 0;
+
             //Calculate number of paint cans needed
             int numPaintCans;
             switch (paintCanSize) {
                 case "0.5":
                     numPaintCans = (int) Math.ceil(paintInLitres / paintCanSizeNum);
+                    totalCostUserChoice = numPaintCans * LHalfPrice;
                     break;
                 case "1":
                     numPaintCans = (int) Math.ceil(paintInLitres);
+                    totalCostUserChoice = numPaintCans * L1price;
                     break;
                 case "2":
                     if (paintInLitres < paintCanSizeNum) {
                         numPaintCans = 1;
+                        totalCostUserChoice = numPaintCans * L2price;
                     } else {
                         numPaintCans = (int) Math.ceil(paintInLitres / paintCanSizeNum);
+                        totalCostUserChoice = numPaintCans * L2price;
                     }
                     break;
                 default:
                     System.out.println("Hm, I don't understand");
                     numPaintCans = 0;
             }
+
             System.out.println("The area to paint is " + totalPaintArea  + " square meters. The amount of " + wallColour + " paint needed is " + Math.round(amountPaintNeeded*100.0)/100.0 +
-                    "L. Which is " + numPaintCans + " can(s) of " + paintCanSize + "L. paint. The amount of paint left over is " + Math.round(((paintCanSizeNum * numPaintCans) - amountPaintNeeded )*100.0)/100.0 + "L." );
+                    "L. Which is " + numPaintCans + " can(s) of " + paintCanSize + "L. paint. The amount of paint left over is " + Math.round(((paintCanSizeNum * numPaintCans) - amountPaintNeeded )*100.0)/100.0 + "L." +
+                    "The cost will be " + totalCostUserChoice  + " pounds.");
         } else {
 
+            int totalCostCompChoice = 0;
+
             // Work out number of paint cans needed
-            int num2Ls = 0;
-            int num1Ls = 0;
-            int numHalfLs = 0;
+            byte num2Ls = 0;
+            byte num1Ls = 0;
+            byte numHalfLs = 0;
             double totalPaintCanLitres = 0;
 
             while (paintInLitres > 0) {
                 if (paintInLitres > 1.0) {
-                    num2Ls += 1;
+                    num2Ls++;
                     totalPaintCanLitres += 2;
                     paintInLitres -= 2.0;
+                    totalCostCompChoice+= L2price;
                 } else if (paintInLitres > 0.5) {
-                    num1Ls += 1;
+                    num1Ls++;
                     totalPaintCanLitres += 1;
                     paintInLitres -= 1.0;
+                    totalCostCompChoice += L1price;
                 } else {
-                    numHalfLs += 1;
+                    numHalfLs++;
                     totalPaintCanLitres += 0.5;
                     paintInLitres -= 0.5;
+                    totalCostCompChoice += LHalfPrice;
                 }
             }
 
@@ -133,7 +206,7 @@ public class Main {
             }
             if ( num1Ls > 0 ) {
                 String L1message = num1Ls + " can of 1 litre paint";
-                if (numHalfLs == 0) {
+                if (numHalfLs != 0) {
                     String and = " and ";
                     L1message = and.concat(L1message);
                 } else {
@@ -151,10 +224,11 @@ public class Main {
             // add paint left over
             returnMessage = returnMessage.concat(" The amount of paint left over is " + Math.round(paintLeftOver*100.0)/100.0 + ".");
 
+            // add cost
+            returnMessage = returnMessage.concat(" The cost is " + totalCostCompChoice + " pounds.");
+
             // return message
             System.out.println(returnMessage);
         }
     }
 }
-//Math.round(paintLeftOver*100.0)/100.0
-//Math.round(amountPaintNeeded*100.0)/100.0
