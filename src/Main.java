@@ -160,7 +160,7 @@ public class Main {
         }
         return retStr;
     }
-    public static boolean query(String input) {
+    private static boolean query(String input) {
         input = input.toLowerCase().trim();
         boolean retBool = false;
         switch (input) {
@@ -204,31 +204,31 @@ public class Main {
                     double obstacleArea = 0;
                     switch (obstacleShape) {
                         case "square":
-                            System.out.println("How wide is obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            System.out.println("How wide is obstacle " + j + "? (in metres and centimetres i.e 1.5, 0.34)");
                             double obstacleHeightSq = Double.parseDouble(myScanner.nextLine());
 
                             obstacleArea = Math.pow((obstacleHeightSq), 2) ;
                             break;
                         case "rectangle":
-                            System.out.println("How tall is obstacle" + j + "? (in metres and centimetres i.e 1.5, 0.34)");
+                            System.out.println("How tall is obstacle " + j + "? (in metres and centimetres i.e 1.5, 0.34)");
                             double obstacleHeightRec = Double.parseDouble(myScanner.nextLine());
 
-                            System.out.println("How wide is obstacle" + j + "? \"(in metres and centimetres i.e 1.5, 0.34)");
+                            System.out.println("How wide is obstacle " + j + "? (in metres and centimetres i.e 1.5, 0.34)");
                             double obstacleWidthRec = Double.parseDouble(myScanner.nextLine());
 
                             obstacleArea = (obstacleHeightRec * obstacleWidthRec);
                             break;
                         case "triangle":
-                            System.out.println("How tall is obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            System.out.println("How tall is obstacle " + j + "? (in metres and centimetres i.e 1.5, 0.34)");
                             double obstacleHeightTri = Double.parseDouble(myScanner.nextLine());
 
-                            System.out.println("How wide is the base of obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            System.out.println("How wide is the base of obstacle " + j + "? (in metres and centimetres i.e 1.5, 0.34)");
                             double obstacleWidthTri = Double.parseDouble(myScanner.nextLine());
 
                             obstacleArea = (obstacleHeightTri * obstacleWidthTri / 2);
                             break;
                         case "circle":
-                            System.out.println("How wide is obstacle" + j + "(in metres and centimetres i.e 1.5, 0.34)");
+                            System.out.println("How wide is obstacle " + j + "? (in metres and centimetres i.e 1.5, 0.34)");
                             double obstacleWidthCir = Double.parseDouble(myScanner.nextLine());
                             double radius = obstacleWidthCir/ 2;
 
